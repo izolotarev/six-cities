@@ -1,17 +1,18 @@
 import React from 'react';
-import PlaceCard from '../place-card/place-card';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const/const';
+import {AppRoute, cities} from '../../const/const';
+import OffersList from '../offers-list/offers-list';
+import offerProp from '../../types/offer.prop';
 
-const MainScreen = ({numberOfCards}) => {
+const MainScreen = ({numberOfCards, offers}) => {
   return (
     <div className="page page--gray page--main">
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <Link className="header__logo-link header__logo-link--active" to={AppRoute.Root}>
+              <Link className="header__logo-link header__logo-link--active" to={AppRoute.ROOT}>
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
               </Link>
             </div>
@@ -35,36 +36,15 @@ const MainScreen = ({numberOfCards}) => {
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
+              {
+                cities.map((city) => (
+                  <li key={city} className="locations__item">
+                    <a className="locations__item-link tabs__item" href="#">
+                      <span>{city}</span>
+                    </a>
+                  </li>
+                ))
+              }
             </ul>
           </section>
         </div>
@@ -81,7 +61,7 @@ const MainScreen = ({numberOfCards}) => {
                     <use xlinkHref="#icon-arrow-select"></use>
                   </svg>
                 </span>
-                <ul className="places__options places__options--custom places__options--opened">
+                <ul className="places__options places__options--custom">
                   <li className="places__option places__option--active" tabIndex="0">Popular</li>
                   <li className="places__option" tabIndex="0">Price: low to high</li>
                   <li className="places__option" tabIndex="0">Price: high to low</li>
@@ -89,7 +69,7 @@ const MainScreen = ({numberOfCards}) => {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {Array(numberOfCards).fill(1).map(() => <PlaceCard key={1} />)}
+                <OffersList offers={offers} numberOfCards={numberOfCards} />
               </div>
             </section>
             <div className="cities__right-section">
@@ -104,6 +84,8 @@ const MainScreen = ({numberOfCards}) => {
 
 MainScreen.propTypes = {
   numberOfCards: PropTypes.number.isRequired,
+  // offers: PropTypes.array.isRequired,
+  offers: PropTypes.arrayOf(offerProp),
 };
 
 export default MainScreen;

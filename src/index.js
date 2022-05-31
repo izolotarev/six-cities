@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
+import {offers} from './mocks/offers';
+import {reviews} from './mocks/reviews';
 
 const Setting = {
   NUMBER_OF_CARDS: 5,
@@ -9,6 +11,8 @@ const Setting = {
 ReactDOM.render(
     <App
       numberOfCards = {Setting.NUMBER_OF_CARDS}
+      offers = {offers}
+      reviews = {reviews}
     />,
     document.querySelector(`#root`)
 );

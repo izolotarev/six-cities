@@ -1,31 +1,22 @@
 import React from 'react';
-import MouseEvent from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
+// import PropTypes from 'prop-types';
 import offerProp from '../../types/offer.prop';
-import PropTypes from 'prop-types';
 
-const PlaceCard = ({offer, onHover}) => {
-  const {isPremium, previewImage, title, price, isFavorite, rating, type, id} = offer;
+const FavoritesCard = ({favoriteOffer}) => {
+  const {isPremium, previewImage, title, price, isFavorite, rating, type, id} = favoriteOffer;
   const history = useHistory();
-
-  const handleHover = (evt) => {
-    evt.preventDefault();
-    onHover(offer);
-  };
 
   const handleClick = () => {
     history.push(
         `${AppRoute.OFFER}/${id}`,
-        {state: offer},
+        {state: favoriteOffer},
     );
   };
 
   return (
-    <article className="cities__place-card place-card"
-      onMouseOver={handleHover}
-      onClick={handleClick}
-    >
+    <article className="favorites__card place-card" onClick={handleClick}>
       {
         isPremium
           ?
@@ -34,12 +25,12 @@ const PlaceCard = ({offer, onHover}) => {
           </div>
           : ``
       }
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div className="favorites__image-wrapper place-card__image-wrapper">
         <Link to={`#`}>
-          <img className="place-card__image" src={previewImage} width="260" height="200" alt={title} />
+          <img className="place-card__image" src={previewImage} width="150" height="110" alt={title} />
         </Link>
       </div>
-      <div className="place-card__info">
+      <div className="favorites__card-info place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
@@ -49,7 +40,7 @@ const PlaceCard = ({offer, onHover}) => {
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
-            <span className="visually-hidden">To bookmarks</span>
+            <span className="visually-hidden">In bookmarks</span>
           </button>
         </div>
         <div className="place-card__rating rating">
@@ -67,9 +58,8 @@ const PlaceCard = ({offer, onHover}) => {
   );
 };
 
-PlaceCard.propTypes = {
-  offer: offerProp,
-  onHover: PropTypes.func,
+FavoritesCard.propTypes = {
+  favoriteOffer: offerProp,
 };
 
-export default PlaceCard;
+export default FavoritesCard;
