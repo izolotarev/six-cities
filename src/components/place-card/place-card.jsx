@@ -11,7 +11,7 @@ const PlaceCard = ({offer, onHover}) => {
 
   const handleHover = (evt) => {
     evt.preventDefault();
-    onHover(offer);
+    onHover(offer.id);
   };
 
   const handleClick = () => {

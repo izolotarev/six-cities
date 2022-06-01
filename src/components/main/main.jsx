@@ -1,11 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {AppRoute, cities} from '../../const/const';
 import OffersList from '../offers-list/offers-list';
 import offerProp from '../../types/offer.prop';
+import Map from '../map/map';
 
 const MainScreen = ({numberOfCards, offers}) => {
+  const points = offers.map((offer) => ({location: offer.location, id: offer.id}));
+  const city = offers[0].city;
+  const [selectedPoint, setSelectedPoint] = useState(undefined);
+
+  const onListItemHover = (id) => {
+    setSelectedPoint(id);
+  };
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -37,10 +46,10 @@ const MainScreen = ({numberOfCards, offers}) => {
           <section className="locations container">
             <ul className="locations__list tabs__list">
               {
-                cities.map((city) => (
-                  <li key={city} className="locations__item">
+                cities.map((menuCity) => (
+                  <li key={menuCity} className="locations__item">
                     <a className="locations__item-link tabs__item" href="#">
-                      <span>{city}</span>
+                      <span>{menuCity}</span>
                     </a>
                   </li>
                 ))
@@ -69,11 +78,11 @@ const MainScreen = ({numberOfCards, offers}) => {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OffersList offers={offers} numberOfCards={numberOfCards} />
+                <OffersList offers={offers} numberOfCards={numberOfCards} onListItemHover={onListItemHover} />
               </div>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map city={city} points={points} selectedPoint={selectedPoint} />
             </div>
           </div>
         </div>
@@ -84,7 +93,6 @@ const MainScreen = ({numberOfCards, offers}) => {
 
 MainScreen.propTypes = {
   numberOfCards: PropTypes.number.isRequired,
-  // offers: PropTypes.array.isRequired,
   offers: PropTypes.arrayOf(offerProp),
 };
 
