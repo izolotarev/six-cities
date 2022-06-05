@@ -33,7 +33,7 @@ const App = (props) => {
         }>
         </Route>
         <Route path={AppRoute.OFFER}>
-          <PropertyScreen reviews={reviews}/>
+          <PropertyScreen reviews={reviews} offers={offers}/>
         </Route>
         <Route>
           <Screen404 />

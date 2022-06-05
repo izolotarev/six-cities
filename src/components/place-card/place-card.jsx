@@ -1,30 +1,25 @@
 import React from 'react';
 import MouseEvent from 'react';
-import {Link, useHistory} from 'react-router-dom';
-import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
+import {Link} from 'react-router-dom';
+import {AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize} from '../../const/const';
 import offerProp from '../../types/offer.prop';
 import PropTypes from 'prop-types';
 
-const PlaceCard = ({offer, onHover}) => {
+const PlaceCard = ({offer, onHover, screen}) => {
   const {isPremium, previewImage, title, price, isFavorite, rating, type, id} = offer;
-  const history = useHistory();
 
   const handleHover = (evt) => {
     evt.preventDefault();
+    if (screen !== Screen.MAIN) {
+      return;
+    }
+
     onHover(offer.id);
   };
 
-  const handleClick = () => {
-    history.push(
-        `${AppRoute.OFFER}/${id}`,
-        {state: offer},
-    );
-  };
-
   return (
-    <article className="cities__place-card place-card"
+    <article className={`${screen === Screen.MAIN ? `cities__place-card` : `${screen}__card`} place-card`}
       onMouseOver={handleHover}
-      onClick={handleClick}
     >
       {
         isPremium
@@ -34,12 +29,16 @@ const PlaceCard = ({offer, onHover}) => {
           </div>
           : ``
       }
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`#`}>
-          <img className="place-card__image" src={previewImage} width="260" height="200" alt={title} />
+      <div className={`${screen}__image-wrapper place-card__image-wrapper`}>
+        <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer}}>
+          <img className="place-card__image" src={previewImage}
+            width={screen === Screen.FAVORITE ? FavoriteCardImageSize.WIDTH : BasicCardImageSize.WIDTH}
+            height={screen === Screen.FAVORITE ? FavoriteCardImageSize.HEIGHT : BasicCardImageSize.HEIGHT}
+            alt={title}
+          />
         </Link>
       </div>
-      <div className="place-card__info">
+      <div className={`${screen === Screen.FAVORITE ? `favorites__card-info` : ``} place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
@@ -59,7 +58,7 @@ const PlaceCard = ({offer, onHover}) => {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`#`}>{title}</Link>
+          <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer}}>{title}</Link>
         </h2>
         <p className="place-card__type">{RoomTypes[type.toUpperCase()]}</p>
       </div>
@@ -70,6 +69,7 @@ const PlaceCard = ({offer, onHover}) => {
 PlaceCard.propTypes = {
   offer: offerProp,
   onHover: PropTypes.func,
+  screen: PropTypes.string,
 };
 
 export default PlaceCard;

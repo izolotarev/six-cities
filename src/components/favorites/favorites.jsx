@@ -1,9 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {AppRoute, cities} from '../../const/const';
+import {AppRoute, cities, Screen} from '../../const/const';
 import PropTypes from 'prop-types';
 import offerProp from '../../types/offer.prop';
-import FavoritesCard from '../favorites-card/favorites-card';
+import PlaceCard from '../place-card/place-card';
 
 const FavoritesScreen = ({favoriteOffers}) => {
   const favoriteCities = {};
@@ -58,7 +58,7 @@ const FavoritesScreen = ({favoriteOffers}) => {
                     </div>
                     <div className="favorites__places">
                       {
-                        entry[1].map((favoriteOffer) => <FavoritesCard key={favoriteOffer.id} favoriteOffer={favoriteOffer}/>)
+                        entry[1].map((favoriteOffer) => <PlaceCard key={favoriteOffer.id} offer={favoriteOffer} screen={Screen.FAVORITE}/>)
                       }
                     </div>
                   </li>

@@ -33,3 +33,19 @@ export const URL_MARKER_CURRENT =
 
 // export const URL_MARKER_CURRENT =
 //   '/public/img/pin-active.svg';
+
+export const Screen = {
+  MAIN: 'cities',
+  FAVORITE: 'favorites',
+  PROPERTY: 'near-places',
+};
+
+export const BasicCardImageSize = {
+  WIDTH: 260,
+  HEIGHT: 200,
+};
+
+export const FavoriteCardImageSize = {
+  WIDTH: 150,
+  HEIGHT: 110,
+};

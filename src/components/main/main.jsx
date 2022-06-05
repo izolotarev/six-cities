@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {AppRoute, cities} from '../../const/const';
+import {AppRoute, cities, Screen} from '../../const/const';
 import OffersList from '../offers-list/offers-list';
 import offerProp from '../../types/offer.prop';
 import Map from '../map/map';
@@ -78,7 +78,7 @@ const MainScreen = ({numberOfCards, offers}) => {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OffersList offers={offers} numberOfCards={numberOfCards} onListItemHover={onListItemHover} />
+                <OffersList offers={offers} numberOfCards={numberOfCards} onListItemHover={onListItemHover} screen={Screen.MAIN}/>
               </div>
             </section>
             <div className="cities__right-section">
