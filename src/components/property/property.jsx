@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Link, useLocation} from 'react-router-dom';
-import {AppRoute, RoomTypes, MAX_RATING, Screen} from '../../const/const';
+import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
 import PropTypes from 'prop-types';
 import ReviewsList from '../reviews-list/reviews-list';
 import reviewProp from '../../types/review.prop';
@@ -15,10 +15,9 @@ const PropertyScreen = ({reviews, offers}) => {
     window.scrollTo(0, 0);
   }, [state]);
 
-  const {images, isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price, goods, host, description, city, id} = state;
+  const {images, isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price, goods, host, description, id} = state;
   const {avatarUrl, isPro, name} = host;
   const closeByOffers = offers.filter((offer) => offer.id !== id).slice(0, 3);
-  const closeByPoints = closeByOffers.map((offer) => ({location: offer.location, id: offer.id}));
 
   return (
     <div className="page">
@@ -138,7 +137,7 @@ const PropertyScreen = ({reviews, offers}) => {
             </div>
           </div>
           <section className="property__map map">
-            <Map city={city} points={closeByPoints}/>
+            <Map offers={closeByOffers}/>
           </section>
         </section>
         <div className="container">
@@ -146,7 +145,7 @@ const PropertyScreen = ({reviews, offers}) => {
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
               {
-                closeByOffers.map((offer) => <PlaceCard key={offer.id} offer={offer} screen={Screen.PROPERTY}/>)
+                closeByOffers.map((offer) => <PlaceCard key={offer.id} offer={offer} isPropertyScreen/>)
               }
             </div>
           </section>

@@ -1,11 +1,10 @@
 import React, {useRef, useEffect} from 'react';
-import {Icon, Marker} from 'leaflet';
+import {Icon, Marker, LayerGroup} from 'leaflet';
 import useMap from '../../hooks/useMap';
 import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const/const';
 import 'leaflet/dist/leaflet.css';
-import cityProp from '../../types/city.prop';
-import mapPointsProp from '../../types/mapPoints.prop';
 import PropTypes from 'prop-types';
+import offerProp from '../../types/offer.prop';
 
 const defaultCustomIcon = new Icon({
   iconUrl: URL_MARKER_DEFAULT,
@@ -19,12 +18,17 @@ const currentCustomIcon = new Icon({
   iconAnchor: [20, 40],
 });
 
-const Map = ({city, points, selectedPoint}) => {
+const Map = ({offers, selectedPoint}) => {
+  const city = offers[0].city;
+  const points = offers.map((offer) => ({location: offer.location, id: offer.id}));
+
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
   useEffect(() => {
     if (map) {
+
+      const markers = [];
       points.forEach((point) => {
         const marker = new Marker({
           lat: point.location.latitude,
@@ -36,9 +40,14 @@ const Map = ({city, points, selectedPoint}) => {
               selectedPoint !== undefined && point.id === selectedPoint
                 ? currentCustomIcon
                 : defaultCustomIcon,
-          )
-          .addTo(map);
+          );
+        markers.push(marker);
       });
+
+      const layer = new LayerGroup(markers).addTo(map);
+      return () => {
+        layer.clearLayers();
+      };
     }
   }, [map, points, selectedPoint]);
 
@@ -46,8 +55,7 @@ const Map = ({city, points, selectedPoint}) => {
 };
 
 Map.propTypes = {
-  city: cityProp,
-  points: PropTypes.arrayOf(mapPointsProp),
+  offers: PropTypes.arrayOf(offerProp),
   selectedPoint: PropTypes.number,
 };
 

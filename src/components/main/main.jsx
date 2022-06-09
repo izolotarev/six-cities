@@ -1,18 +1,22 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {AppRoute, cities, Screen} from '../../const/const';
+import {AppRoute, cities} from '../../const/const';
 import OffersList from '../offers-list/offers-list';
 import offerProp from '../../types/offer.prop';
-import Map from '../map/map';
+import {connect} from 'react-redux';
+import {ActionCreator} from '../../store/action';
+import MainScreenEmpty from '../main-empty/main-empty';
 
-const MainScreen = ({numberOfCards, offers}) => {
-  const points = offers.map((offer) => ({location: offer.location, id: offer.id}));
-  const city = offers[0].city;
-  const [selectedPoint, setSelectedPoint] = useState(undefined);
+const MainScreen = ({numberOfCards, offers, selectedCity, onCityChange}) => {
+  const offersInSelectedCity = offers.filter((offer) => offer.city.name === selectedCity);
 
-  const onListItemHover = (id) => {
-    setSelectedPoint(id);
+  const handleCityClick = (evt) => {
+    evt.preventDefault();
+    const input = evt.target;
+    if (input.textContent) {
+      onCityChange(input.textContent);
+    }
   };
 
   return (
@@ -48,7 +52,11 @@ const MainScreen = ({numberOfCards, offers}) => {
               {
                 cities.map((menuCity) => (
                   <li key={menuCity} className="locations__item">
-                    <a className="locations__item-link tabs__item" href="#">
+                    <a
+                      className={`locations__item-link tabs__item ${menuCity === selectedCity ? `tabs__item--active` : ``}`}
+                      href="#"
+                      onClick={handleCityClick}
+                    >
                       <span>{menuCity}</span>
                     </a>
                   </li>
@@ -57,35 +65,11 @@ const MainScreen = ({numberOfCards, offers}) => {
             </ul>
           </section>
         </div>
-        <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex="0">
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom">
-                  <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                  <li className="places__option" tabIndex="0">Price: low to high</li>
-                  <li className="places__option" tabIndex="0">Price: high to low</li>
-                  <li className="places__option" tabIndex="0">Top rated first</li>
-                </ul>
-              </form>
-              <div className="cities__places-list places__list tabs__content">
-                <OffersList offers={offers} numberOfCards={numberOfCards} onListItemHover={onListItemHover} screen={Screen.MAIN}/>
-              </div>
-            </section>
-            <div className="cities__right-section">
-              <Map city={city} points={points} selectedPoint={selectedPoint} />
-            </div>
-          </div>
-        </div>
+        {
+          offersInSelectedCity.length === 0
+            ? <MainScreenEmpty selectedCity={selectedCity}/>
+            : <OffersList selectedCity={selectedCity} offers={offersInSelectedCity} numberOfCards={numberOfCards} />
+        }
       </main>
     </div>
   );
@@ -96,4 +80,19 @@ MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerProp),
 };
 
-export default MainScreen;
+const mapStateToProps = ({selectedCity}) => ({
+  selectedCity
+});
+
+// const mapStateToProps = (state) => ({
+//   selectedCity: state.selectedCity
+// });
+
+const mapDispatchToProps = (dispatch) => ({
+  onCityChange(selectedCity) {
+    dispatch(ActionCreator.getCity(selectedCity));
+  },
+});
+
+export {MainScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

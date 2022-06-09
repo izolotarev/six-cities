@@ -14,6 +14,8 @@ const useMap = (mapRef, city) => {
         zoom: city.location.zoom,
       });
 
+      console.log(instance);
+
       const layer = new TileLayer(
           `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`,
           {
