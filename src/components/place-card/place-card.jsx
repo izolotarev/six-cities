@@ -25,14 +25,16 @@ const PlaceCard = ({offer, onHover, isMainScreen, isFavoriteScreen, isPropertySc
   };
 
   const screenClass = () => {
-    if (isMainScreen) {
-      return Screen.MAIN;
-    } else if (isFavoriteScreen) {
-      return Screen.FAVORITE;
-    } else if (isPropertyScreen) {
-      return Screen.PROPERTY;
+    switch (true) {
+      case isMainScreen:
+        return Screen.MAIN;
+      case isFavoriteScreen:
+        return Screen.FAVORITE;
+      case isPropertyScreen:
+        return Screen.PROPERTY;
+      default:
+        return Screen.MAIN;
     }
-    return Screen.MAIN;
   };
 
   return (
@@ -88,6 +90,9 @@ PlaceCard.propTypes = {
   offer: offerProp,
   onHover: PropTypes.func,
   screen: PropTypes.string,
+  isMainScreen: PropTypes.bool,
+  isFavoriteScreen: PropTypes.bool,
+  isPropertyScreen: PropTypes.bool,
 };
 
 export default PlaceCard;

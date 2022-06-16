@@ -8,4 +8,8 @@ export const ActionCreator = {
     type: ActionType.GET_CITY,
     payload: city,
   }),
+  getOffers: (offers) => ({
+    type: ActionType.GET_OFFERS,
+    payload: offers,
+  })
 };

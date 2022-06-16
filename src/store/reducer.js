@@ -12,7 +12,7 @@ const reducer = (state = initialState, action) => {
     case ActionType.GET_CITY:
       return {...state, selectedCity: action.payload};
     case ActionType.GET_OFFERS:
-      return {...state, selectedCity: action.type};
+      return {...state, offers: action.payload};
     default:
       return state;
   }

@@ -78,15 +78,17 @@ const MainScreen = ({numberOfCards, offers, selectedCity, onCityChange}) => {
 MainScreen.propTypes = {
   numberOfCards: PropTypes.number.isRequired,
   offers: PropTypes.arrayOf(offerProp),
+  selectedCity: PropTypes.string.isRequired,
+  onCityChange: PropTypes.func,
 };
-
-const mapStateToProps = ({selectedCity}) => ({
-  selectedCity
-});
 
 // const mapStateToProps = (state) => ({
 //   selectedCity: state.selectedCity
 // });
+
+const mapStateToProps = ({selectedCity}) => ({
+  selectedCity
+});
 
 const mapDispatchToProps = (dispatch) => ({
   onCityChange(selectedCity) {
