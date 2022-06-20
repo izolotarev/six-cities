@@ -1,10 +1,12 @@
-import {offers} from '../mocks/offers';
+import {AuthorizationStatus} from '../const/const';
+import {adaptToClient} from '../utils/utils';
 import {ActionType} from './action';
-
 
 export const initialState = {
   selectedCity: `Paris`,
-  offers,
+  offers: [],
+  authorizationStatus: AuthorizationStatus.NO_AUTH,
+  isDataLoaded: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -12,7 +14,11 @@ const reducer = (state = initialState, action) => {
     case ActionType.GET_CITY:
       return {...state, selectedCity: action.payload};
     case ActionType.GET_OFFERS:
-      return {...state, offers: action.payload};
+      return {...state, offers: adaptToClient(action.payload), isDataLoaded: true};
+    case ActionType.REQUIRED_AUTHORIZATION:
+      return {...state, authorizationStatus: action.payload};
+    case ActionType.REQUIRE_LOGOUT:
+      return {...state, authorizationStatus: AuthorizationStatus.NO_AUTH};
     default:
       return state;
   }

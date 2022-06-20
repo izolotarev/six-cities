@@ -5,10 +5,15 @@ export const AppRoute = {
   FAVORITE: '/favorite',
 };
 
+export const APIRoute = {
+  OFFERS: '/hotels',
+  LOGIN: '/login',
+  LOGOUT: '/logout',
+};
+
 export const AuthorizationStatus = {
-  Auth:'AUTH',
-  NoAuth: 'NO_AUTH',
-  Unknown: 'UNKNOWN',
+  AUTH:'AUTH',
+  NO_AUTH: 'NO_AUTH',
 };
 
 export const RoomTypes = {
@@ -59,8 +64,8 @@ export const sortOffers = (data, filter) => {
       return data.slice().sort((prev, next) => (prev.price - next.price));
     case SortMode.TOP_RATED:
       return data.slice().sort((prev, next) => (next.rating - prev.rating));
-    case SortMode.POPULAR:
     default:
       return data.slice();
   }
 };
+

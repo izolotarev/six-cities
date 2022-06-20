@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
 import MainScreenEmpty from '../main-empty/main-empty';
 
-const MainScreen = ({numberOfCards, offers, selectedCity, onCityChange}) => {
+const MainScreen = ({offers, selectedCity, onCityChange}) => {
   const offersInSelectedCity = offers.filter((offer) => offer.city.name === selectedCity);
 
   const handleCityClick = (evt) => {
@@ -68,7 +68,7 @@ const MainScreen = ({numberOfCards, offers, selectedCity, onCityChange}) => {
         {
           offersInSelectedCity.length === 0
             ? <MainScreenEmpty selectedCity={selectedCity}/>
-            : <OffersList selectedCity={selectedCity} offers={offersInSelectedCity} numberOfCards={numberOfCards} />
+            : <OffersList selectedCity={selectedCity} offers={offersInSelectedCity} />
         }
       </main>
     </div>
@@ -76,7 +76,6 @@ const MainScreen = ({numberOfCards, offers, selectedCity, onCityChange}) => {
 };
 
 MainScreen.propTypes = {
-  numberOfCards: PropTypes.number.isRequired,
   offers: PropTypes.arrayOf(offerProp),
   selectedCity: PropTypes.string.isRequired,
   onCityChange: PropTypes.func,

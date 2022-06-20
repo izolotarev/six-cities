@@ -6,7 +6,7 @@ import Map from '../map/map';
 import SortOptions from '../sort-options/sort-options';
 import {sortOffers} from '../../const/const';
 
-const OffersList = ({selectedCity, numberOfCards, offers}) => {
+const OffersList = ({selectedCity, offers}) => {
   const listItemHoverHandler = (id) => {
     onListItemHover(id);
   };
@@ -26,6 +26,10 @@ const OffersList = ({selectedCity, numberOfCards, offers}) => {
     setSortedOffers(offers);
   }, [offers]);
 
+  useEffect(() => {
+    setSelectedPoint(undefined);
+  }, [selectedCity]);
+
   return (
     <div className="cities">
       <div className="cities__places-container container">
@@ -34,7 +38,7 @@ const OffersList = ({selectedCity, numberOfCards, offers}) => {
           <b className="places__found">{offers.length === 1 ? `1 place` : `${offers.length} places`} to stay in {selectedCity}</b>
           <SortOptions onSortModeChange={onSortModeChange} selectedCity={selectedCity}/>
           <div className="cities__places-list places__list tabs__content">
-            {sortedOffers.slice(0, numberOfCards).map((offer) =>
+            {sortedOffers.slice().map((offer) =>
               <PlaceCard key={offer.id} offer={offer} onHover={listItemHoverHandler} isMainScreen />,
             )}
           </div>
@@ -51,7 +55,6 @@ const OffersList = ({selectedCity, numberOfCards, offers}) => {
 
 OffersList.propTypes = {
   selectedCity: PropTypes.string.isRequired,
-  numberOfCards: PropTypes.number.isRequired,
   offers: PropTypes.arrayOf(offerProp),
 };
 

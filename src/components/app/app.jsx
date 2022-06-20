@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import MainScreen from '../main/main';
 import PropTypes from 'prop-types';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Router as BrowserRouter, Route, Switch} from 'react-router-dom';
 import LoginScreen from '../login/login';
 import FavoritesScreen from '../favorites/favorites';
 import PropertyScreenNotLogged from '../property-not-logged/property-not-logged';
@@ -12,26 +12,46 @@ import PropertyScreen from '../property/property';
 import offerProp from '../../types/offer.prop';
 import reviewProp from '../../types/review.prop';
 import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
+import {connect} from 'react-redux';
+import LoadingScreen from '../loading-screen/loading-screen';
+import {fetchOffers} from '../../store/api-actions';
+import PrivateRoute from '../private-route/private-route';
+import browserHistory from "../../browser-history";
 
 const App = (props) => {
-  const {numberOfCards, offers, reviews} = props;
+  const {offers, reviews, authorizationStatus, isDataLoaded, onLoadData} = props;
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
+  useEffect(() => {
+    if (!isDataLoaded) {
+      onLoadData();
+    }
+  }, [isDataLoaded]);
+
+  if (!isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route path={AppRoute.ROOT} exact>
-          <MainScreen numberOfCards={numberOfCards} offers={offers} />
+          <MainScreen offers={offers} />
         </Route>
         <Route path={AppRoute.LOGIN} exact>
-          <LoginScreen />
+          <LoginScreen history={browserHistory} />
         </Route>
-        <Route path={AppRoute.FAVORITE} exact render={
-          favoriteOffers.length > 0
-            ? () => <FavoritesScreen favoriteOffers={favoriteOffers}/>
-            : () => <FavoritesScreenEmpty/>
-        }>
-        </Route>
+        <PrivateRoute
+          exact
+          path={AppRoute.FAVORITE}
+          render={
+            favoriteOffers.length > 0
+              ? () => <FavoritesScreen favoriteOffers={favoriteOffers}/>
+              : () => <FavoritesScreenEmpty/>
+          }>
+        </PrivateRoute>
         <Route path={AppRoute.OFFER}>
           <PropertyScreen reviews={reviews} offers={offers}/>
         </Route>
@@ -43,10 +63,24 @@ const App = (props) => {
   );
 };
 
+const mapStateToProps = ({offers, authorizationStatus, isDataLoaded}) => ({
+  offers,
+  authorizationStatus,
+  isDataLoaded,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onLoadData() {
+    dispatch(fetchOffers());
+  },
+});
+
 App.propTypes = {
-  numberOfCards: PropTypes.number.isRequired,
   offers: PropTypes.arrayOf(offerProp),
   reviews: PropTypes.arrayOf(reviewProp),
+  isDataLoaded: PropTypes.bool.isRequired,
+  onLoadData: PropTypes.func.isRequired,
 };
 
-export default App;
+export {App};
+export default connect(mapStateToProps, mapDispatchToProps)(App);

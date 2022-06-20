@@ -1,5 +1,5 @@
 import React, {useRef, useEffect} from 'react';
-import {Icon, Marker, LayerGroup} from 'leaflet';
+import {Icon, Marker} from 'leaflet';
 import useMap from '../../hooks/useMap';
 import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const/const';
 import 'leaflet/dist/leaflet.css';
@@ -27,8 +27,6 @@ const Map = ({offers, selectedPoint}) => {
 
   useEffect(() => {
     if (map) {
-
-      const markers = [];
       points.forEach((point) => {
         const marker = new Marker({
           lat: point.location.latitude,
@@ -40,16 +38,17 @@ const Map = ({offers, selectedPoint}) => {
               selectedPoint !== undefined && point.id === selectedPoint
                 ? currentCustomIcon
                 : defaultCustomIcon,
-          );
-        markers.push(marker);
+          )
+          .addTo(map);
       });
-
-      const layer = new LayerGroup(markers).addTo(map);
-      return () => {
-        layer.clearLayers();
-      };
     }
   }, [map, points, selectedPoint]);
+
+  useEffect(() => {
+    if (map) {
+      map.setView([city.location.latitude, city.location.longitude]);
+    }
+  }, [map, city]);
 
   return <div style={{height: `100%`}} ref={mapRef}></div>;
 };
