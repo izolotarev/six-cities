@@ -8,17 +8,17 @@ export const fetchOffers = () => (dispatch, _getState, api) => (
 
 export const checkAuth = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGIN)
-    .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)))
+    .then((response) => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH, response.data.email)))
     .catch(() => {})
 );
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) => (
   api.post(APIRoute.LOGIN, {email, password})
-    .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)))
+    .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH, email)))
     .then(() => dispatch(ActionCreator.redirectToRoute(AppRoute.ROOT)))
 );
 
 export const logout = () => (dispatch, _getState, api) => (
-  api.delete(APIRoute.LOGOUT)
+  api.get(APIRoute.LOGOUT)
     .then(() => dispatch(ActionCreator.requireLogout()))
 );

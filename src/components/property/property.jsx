@@ -9,6 +9,7 @@ import Map from '../map/map';
 import PlaceCard from '../place-card/place-card';
 
 const PropertyScreen = ({reviews, offers}) => {
+  // по линку передали стейт offer в PlaceCard
   const {state} = useLocation();
 
   useEffect(() => {

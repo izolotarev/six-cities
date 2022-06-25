@@ -7,7 +7,7 @@ import FavoritesScreen from '../favorites/favorites';
 import PropertyScreenNotLogged from '../property-not-logged/property-not-logged';
 import Screen404 from '../not-found-screen/not-found-screen';
 // import PrivateRoute from '../private-route/private-route';
-import {AppRoute, AuthorizationStatus} from '../../const/const';
+import {AppRoute} from '../../const/const';
 import PropertyScreen from '../property/property';
 import offerProp from '../../types/offer.prop';
 import reviewProp from '../../types/review.prop';
@@ -19,7 +19,7 @@ import PrivateRoute from '../private-route/private-route';
 import browserHistory from "../../browser-history";
 
 const App = (props) => {
-  const {offers, reviews, authorizationStatus, isDataLoaded, onLoadData} = props;
+  const {offers, reviews, isDataLoaded, onLoadData} = props;
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
   useEffect(() => {

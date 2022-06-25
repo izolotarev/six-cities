@@ -7,6 +7,7 @@ export const initialState = {
   offers: [],
   authorizationStatus: AuthorizationStatus.NO_AUTH,
   isDataLoaded: false,
+  userEmail: ``,
 };
 
 const reducer = (state = initialState, action) => {
@@ -16,7 +17,7 @@ const reducer = (state = initialState, action) => {
     case ActionType.GET_OFFERS:
       return {...state, offers: adaptToClient(action.payload), isDataLoaded: true};
     case ActionType.REQUIRED_AUTHORIZATION:
-      return {...state, authorizationStatus: action.payload};
+      return {...state, authorizationStatus: action.payload.status, userEmail: action.payload.email};
     case ActionType.REQUIRE_LOGOUT:
       return {...state, authorizationStatus: AuthorizationStatus.NO_AUTH};
     default:
