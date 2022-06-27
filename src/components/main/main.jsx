@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus, cities} from '../../const/const';
+import {AppRoute, cities} from '../../const/const';
 import OffersList from '../offers-list/offers-list';
 import offerProp from '../../types/offer.prop';
 import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
 import MainScreenEmpty from '../main-empty/main-empty';
-import {logout} from '../../store/api-actions';
+import UserNavigation from '../user-navigation/user-navigation';
 
-const MainScreen = ({offers, selectedCity, onCityChange, onLogout, authorizationStatus, userEmail}) => {
+const MainScreen = ({offers, selectedCity, onCityChange}) => {
   const offersInSelectedCity = offers.filter((offer) => offer.city.name === selectedCity);
 
   const handleCityClick = (evt) => {
@@ -31,32 +31,7 @@ const MainScreen = ({offers, selectedCity, onCityChange, onLogout, authorization
               </Link>
             </div>
             <nav className="header__nav">
-              <ul className="header__nav-list">
-                {
-                  authorizationStatus === AuthorizationStatus.AUTH
-                    ?
-                    <>
-                      <li className="header__nav-item user">
-                        <a className="header__nav-link header__nav-link--profile" href="#">
-                          <div className="header__avatar-wrapper user__avatar-wrapper">
-                          </div>
-                          <span className="header__user-name user__name">{userEmail}</span>
-                        </a>
-                      </li>
-                      <li className="header__nav-item">
-                        <a className="header__nav-link" href="/">
-                          <span className="header__signout" onClick={onLogout}>Sign out</span>
-                        </a>
-                      </li>
-                    </>
-                    :
-                    <li className="header__nav-item">
-                      <a className="header__nav-link" href="/">
-                        <span className="header__signout">Sign in</span>
-                      </a>
-                    </li>
-                }
-              </ul>
+              <UserNavigation />
             </nav>
           </div>
         </div>
@@ -97,25 +72,16 @@ MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerProp),
   selectedCity: PropTypes.string.isRequired,
   onCityChange: PropTypes.func,
-  onLogout: PropTypes.func,
-  authorizationStatus: PropTypes.string.isRequired,
-  userEmail: PropTypes.string,
 };
 
-const mapStateToProps = ({selectedCity, authorizationStatus, userEmail}) => ({
+const mapStateToProps = ({selectedCity}) => ({
   selectedCity,
-  authorizationStatus,
-  userEmail
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onCityChange(selectedCity) {
     dispatch(ActionCreator.getCity(selectedCity));
   },
-  onLogout() {
-    console.log('logout');
-    dispatch(logout());
-  }
 });
 
 export {MainScreen};

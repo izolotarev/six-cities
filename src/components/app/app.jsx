@@ -19,7 +19,7 @@ import PrivateRoute from '../private-route/private-route';
 import browserHistory from "../../browser-history";
 
 const App = (props) => {
-  const {offers, reviews, isDataLoaded, onLoadData} = props;
+  const {offers, isDataLoaded, onLoadData} = props;
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
   useEffect(() => {
@@ -52,8 +52,11 @@ const App = (props) => {
               : () => <FavoritesScreenEmpty/>
           }>
         </PrivateRoute>
-        <Route path={AppRoute.OFFER}>
-          <PropertyScreen reviews={reviews} offers={offers}/>
+        <Route path={`${AppRoute.OFFER}/:id`}>
+          <PropertyScreen />
+        </Route>
+        <Route path={AppRoute.NOT_FOUND}>
+          <Screen404 />
         </Route>
         <Route>
           <Screen404 />
@@ -77,7 +80,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 App.propTypes = {
   offers: PropTypes.arrayOf(offerProp),
-  reviews: PropTypes.arrayOf(reviewProp),
   isDataLoaded: PropTypes.bool.isRequired,
   onLoadData: PropTypes.func.isRequired,
 };

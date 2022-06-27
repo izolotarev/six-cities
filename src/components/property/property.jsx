@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
 import PropTypes from 'prop-types';
 import ReviewsList from '../reviews-list/reviews-list';
@@ -7,18 +7,35 @@ import reviewProp from '../../types/review.prop';
 import offerProp from '../../types/offer.prop';
 import Map from '../map/map';
 import PlaceCard from '../place-card/place-card';
+import {fetchNearbyOffers, fetchOfferById, fetchReviews} from '../../store/api-actions';
+import {ActionCreator} from '../../store/action';
+import {connect} from 'react-redux';
+import LoadingScreen from '../loading-screen/loading-screen';
+import UserNavigation from '../user-navigation/user-navigation';
 
-const PropertyScreen = ({reviews, offers}) => {
-  // по линку передали стейт offer в PlaceCard
-  const {state} = useLocation();
+const PropertyScreen = ({reviews, offer, onPageLoad, onDismount, nearbyOffers, getNearbyOffers, getReviews}) => {
+  // берем id из параметров
+  const params = useParams();
+  const id = parseInt(params.id, 10);
 
   useEffect(() => {
+    onPageLoad(id);
+    getNearbyOffers(id);
+    getReviews(id);
     window.scrollTo(0, 0);
-  }, [state]);
 
-  const {images, isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price, goods, host, description, id} = state;
+    return () => onDismount();
+  }, [getNearbyOffers, getReviews, id, onDismount, onPageLoad]);
+
+  if (!offer) {
+    return (
+      <LoadingScreen/>
+    );
+  }
+
+  const {images, isPremium, title, isFavorite, rating, type, bedrooms, maxAdults, price, goods, host, description} = offer;
+
   const {avatarUrl, isPro, name} = host;
-  const closeByOffers = offers.filter((offer) => offer.id !== id).slice(0, 3);
 
   return (
     <div className="page">
@@ -31,16 +48,7 @@ const PropertyScreen = ({reviews, offers}) => {
               </Link>
             </div>
             <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__login">Sign in</span>
-                    {/* <span className="header__user-name user__name">Oliver.conner@gmail.com</span> */}
-                  </a>
-                </li>
-              </ul>
+              <UserNavigation/>
             </nav>
           </div>
         </div>
@@ -134,11 +142,19 @@ const PropertyScreen = ({reviews, offers}) => {
                   </p>
                 </div>
               </div>
-              <ReviewsList reviews={reviews} />
+              {
+                reviews
+                  ? <ReviewsList reviews={reviews}/>
+                  : ``
+              }
             </div>
           </div>
           <section className="property__map map">
-            <Map offers={closeByOffers}/>
+            {
+              nearbyOffers
+                ? <Map offers={nearbyOffers}/>
+                : ``
+            }
           </section>
         </section>
         <div className="container">
@@ -146,7 +162,9 @@ const PropertyScreen = ({reviews, offers}) => {
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
               {
-                closeByOffers.map((offer) => <PlaceCard key={offer.id} offer={offer} isPropertyScreen/>)
+                nearbyOffers
+                  ? nearbyOffers.map((nearbyOffer) => <PlaceCard key={nearbyOffer.id} offer={nearbyOffer} isPropertyScreen />)
+                  : ``
               }
             </div>
           </section>
@@ -158,7 +176,34 @@ const PropertyScreen = ({reviews, offers}) => {
 
 PropertyScreen.propTypes = {
   reviews: PropTypes.arrayOf(reviewProp),
-  offers: PropTypes.arrayOf(offerProp),
+  offer: offerProp,
+  onPageLoad: PropTypes.func.isRequired,
+  onDismount: PropTypes.func.isRequired,
+  nearbyOffers: PropTypes.arrayOf(offerProp),
+  getNearbyOffers: PropTypes.func,
+  getReviews: PropTypes.func,
 };
 
-export default PropertyScreen;
+const mapStateToProps = ({offer, nearbyOffers, reviews}) => ({
+  offer,
+  nearbyOffers,
+  reviews,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onPageLoad(id) {
+    dispatch(fetchOfferById(id));
+  },
+  getNearbyOffers(id) {
+    dispatch(fetchNearbyOffers(id));
+  },
+  getReviews(id) {
+    dispatch(fetchReviews(id));
+  },
+  onDismount() {
+    dispatch(ActionCreator.clearOfferById());
+  },
+});
+
+export {PropertyScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(PropertyScreen);

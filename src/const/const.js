@@ -3,12 +3,14 @@ export const AppRoute = {
   LOGIN: '/login',
   OFFER: '/offer',
   FAVORITE: '/favorite',
+  NOT_FOUND: '/not-found',
 };
 
 export const APIRoute = {
   OFFERS: '/hotels',
   LOGIN: '/login',
   LOGOUT: '/logout',
+  REVIEWS: '/comments',
 };
 
 export const AuthorizationStatus = {

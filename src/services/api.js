@@ -19,6 +19,8 @@ export const createAPI = (onUnauthorized) => {
   const onFail = (err) => {
     const {response} = err;
 
+    // toast.info(response.data.error);
+
     if (response.status === HttpCode.UNAUTHORIZED) {
       onUnauthorized();
 

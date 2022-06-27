@@ -24,6 +24,7 @@ const OffersList = ({selectedCity, offers}) => {
 
   useEffect(() => {
     setSortedOffers(offers);
+    window.scrollTo(0, 0);
   }, [offers]);
 
   useEffect(() => {

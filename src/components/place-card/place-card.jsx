@@ -50,7 +50,7 @@ const PlaceCard = ({offer, onHover, isMainScreen, isFavoriteScreen, isPropertySc
           : ``
       }
       <div className={`${screenClass()}__image-wrapper place-card__image-wrapper`}>
-        <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer}}>
+        <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer.id}}>
           <img className="place-card__image" src={previewImage}
             width={isFavoriteScreen ? FavoriteCardImageSize.WIDTH : BasicCardImageSize.WIDTH}
             height={isFavoriteScreen ? FavoriteCardImageSize.HEIGHT : BasicCardImageSize.HEIGHT}
@@ -78,7 +78,7 @@ const PlaceCard = ({offer, onHover, isMainScreen, isFavoriteScreen, isPropertySc
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer}}>{title}</Link>
+          <Link to={{pathname: `${AppRoute.OFFER}/${id}`, state: offer.id}}>{title}</Link>
         </h2>
         <p className="place-card__type">{RoomTypes[type.toUpperCase()]}</p>
       </div>

@@ -1,10 +1,11 @@
 import React from 'react';
 import reviewProp from '../../types/review.prop';
 import ReviewForm from '../review-form/review-form';
-import {MAX_RATING} from '../../const/const';
+import {AuthorizationStatus, MAX_RATING} from '../../const/const';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 
-const ReviewsList = ({reviews}) => {
+const ReviewsList = ({reviews, authorizationStatus}) => {
   return (
     <section className="property__reviews reviews">
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews && reviews.length}</span></h2>
@@ -43,7 +44,9 @@ const ReviewsList = ({reviews}) => {
         }
       </ul>
       {
-        <ReviewForm/>
+        authorizationStatus === AuthorizationStatus.AUTH
+          ? <ReviewForm />
+          : ``
       }
     </section>
   );
@@ -51,6 +54,12 @@ const ReviewsList = ({reviews}) => {
 
 ReviewsList.propTypes = {
   reviews: PropTypes.arrayOf(reviewProp),
+  authorizationStatus: PropTypes.string,
 };
 
-export default ReviewsList;
+const mapStateToProps = ({authorizationStatus}) => ({
+  authorizationStatus,
+});
+
+export {ReviewsList};
+export default connect(mapStateToProps)(ReviewsList);
