@@ -1,13 +1,12 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {AppRoute, cities} from '../../const/const';
+import {cities} from '../../const/const';
 import OffersList from '../offers-list/offers-list';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCity} from '../../store/action';
 import MainScreenEmpty from '../main-empty/main-empty';
-import UserNavigation from '../user-navigation/user-navigation';
 import MainCityItem from './main-city-item';
 import {getOffers, getSelectedCity} from '../../store/reducers/offers-data/selectors';
+import Header from '../header/header';
 
 const MainScreen = () => {
   const offers = useSelector(getOffers);
@@ -27,20 +26,7 @@ const MainScreen = () => {
 
   return (
     <div className="page page--gray page--main">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link header__logo-link--active" to={AppRoute.ROOT}>
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <UserNavigation />
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header isWithUserNavigation />
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
