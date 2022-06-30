@@ -1,31 +1,38 @@
 import React, {useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {AppRoute, RoomTypes, MAX_RATING} from '../../const/const';
-import PropTypes from 'prop-types';
 import ReviewsList from '../reviews-list/reviews-list';
-import reviewProp from '../../types/review.prop';
-import offerProp from '../../types/offer.prop';
 import Map from '../map/map';
 import PlaceCard from '../place-card/place-card';
 import {fetchNearbyOffers, fetchOfferById, fetchReviews} from '../../store/api-actions';
-import {ActionCreator} from '../../store/action';
-import {connect} from 'react-redux';
+import {clearOfferById} from '../../store/action';
+import {useDispatch, useSelector} from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
 import UserNavigation from '../user-navigation/user-navigation';
+import {getNearbyOffers, getOffer} from '../../store/reducers/offers-data/selectors';
+import {getReviews} from '../../store/reducers/reviews-data/selectors';
 
-const PropertyScreen = ({reviews, offer, onPageLoad, onDismount, nearbyOffers, getNearbyOffers, getReviews}) => {
+const PropertyScreen = () => {
   // берем id из параметров
   const params = useParams();
   const id = parseInt(params.id, 10);
 
+  const offer = useSelector(getOffer);
+  const nearbyOffers = useSelector(getNearbyOffers);
+  const reviews = useSelector(getReviews);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    onPageLoad(id);
-    getNearbyOffers(id);
-    getReviews(id);
+    dispatch(fetchOfferById(id));
+    dispatch(fetchNearbyOffers(id));
+    dispatch(fetchReviews(id));
     window.scrollTo(0, 0);
 
-    return () => onDismount();
-  }, [getNearbyOffers, getReviews, id, onDismount, onPageLoad]);
+    return () => {
+      dispatch(clearOfferById());
+    };
+  }, [dispatch, id]);
 
   if (!offer) {
     return (
@@ -174,36 +181,6 @@ const PropertyScreen = ({reviews, offer, onPageLoad, onDismount, nearbyOffers, g
   );
 };
 
-PropertyScreen.propTypes = {
-  reviews: PropTypes.arrayOf(reviewProp),
-  offer: offerProp,
-  onPageLoad: PropTypes.func.isRequired,
-  onDismount: PropTypes.func.isRequired,
-  nearbyOffers: PropTypes.arrayOf(offerProp),
-  getNearbyOffers: PropTypes.func,
-  getReviews: PropTypes.func,
-};
 
-const mapStateToProps = ({offer, nearbyOffers, reviews}) => ({
-  offer,
-  nearbyOffers,
-  reviews,
-});
+export default PropertyScreen;
 
-const mapDispatchToProps = (dispatch) => ({
-  onPageLoad(id) {
-    dispatch(fetchOfferById(id));
-  },
-  getNearbyOffers(id) {
-    dispatch(fetchNearbyOffers(id));
-  },
-  getReviews(id) {
-    dispatch(fetchReviews(id));
-  },
-  onDismount() {
-    dispatch(ActionCreator.clearOfferById());
-  },
-});
-
-export {PropertyScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(PropertyScreen);

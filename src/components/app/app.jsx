@@ -1,30 +1,30 @@
 import React, {useEffect} from 'react';
 import MainScreen from '../main/main';
-import PropTypes from 'prop-types';
 import {Router as BrowserRouter, Route, Switch} from 'react-router-dom';
 import LoginScreen from '../login/login';
 import FavoritesScreen from '../favorites/favorites';
-import PropertyScreenNotLogged from '../property-not-logged/property-not-logged';
 import Screen404 from '../not-found-screen/not-found-screen';
-// import PrivateRoute from '../private-route/private-route';
 import {AppRoute} from '../../const/const';
 import PropertyScreen from '../property/property';
-import offerProp from '../../types/offer.prop';
-import reviewProp from '../../types/review.prop';
 import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
 import {fetchOffers} from '../../store/api-actions';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from "../../browser-history";
+import {getLoadedDataStatus, getOffers} from '../../store/reducers/offers-data/selectors';
 
-const App = (props) => {
-  const {offers, isDataLoaded, onLoadData} = props;
+const App = () => {
+  const offers = useSelector(getOffers);
+  const isDataLoaded = useSelector(getLoadedDataStatus);
+
+  const dispatch = useDispatch();
+
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
   useEffect(() => {
     if (!isDataLoaded) {
-      onLoadData();
+      dispatch(fetchOffers());
     }
   }, [isDataLoaded]);
 
@@ -66,23 +66,5 @@ const App = (props) => {
   );
 };
 
-const mapStateToProps = ({offers, authorizationStatus, isDataLoaded}) => ({
-  offers,
-  authorizationStatus,
-  isDataLoaded,
-});
+export default App;
 
-const mapDispatchToProps = (dispatch) => ({
-  onLoadData() {
-    dispatch(fetchOffers());
-  },
-});
-
-App.propTypes = {
-  offers: PropTypes.arrayOf(offerProp),
-  isDataLoaded: PropTypes.bool.isRequired,
-  onLoadData: PropTypes.func.isRequired,
-};
-
-export {App};
-export default connect(mapStateToProps, mapDispatchToProps)(App);

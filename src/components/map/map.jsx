@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, memo} from 'react';
 import {Icon, Marker} from 'leaflet';
 import useMap from '../../hooks/useMap';
 import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const/const';
@@ -58,4 +58,4 @@ Map.propTypes = {
   selectedPoint: PropTypes.number,
 };
 
-export default Map;
+export default memo(Map);

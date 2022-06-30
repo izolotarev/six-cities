@@ -1,13 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import {ActionCreator} from '../../store/action';
+import {clearPostReviewStatus} from '../../store/action';
 import {postReview} from '../../store/api-actions';
-import {connect} from 'react-redux';
-import {useParams} from 'react-router-dom/cjs/react-router-dom.min';
-import PropTypes from 'prop-types';
+import {useDispatch, useSelector} from 'react-redux';
+import {useParams} from 'react-router-dom';
+import {getReviewPostStatus} from '../../store/reducers/reviews-data/selectors';
 
-const ReviewForm = ({onReviewPost, isPostSuccessfull, clearPostStatus}) => {
+const MIN_REVIEW_LENGTH = 50;
+
+const ReviewForm = () => {
   const params = useParams();
   const id = parseInt(params.id, 10);
+
+  const isPostSuccessfull = useSelector(getReviewPostStatus);
+
+  const dispatch = useDispatch();
 
   const [review, setReview] = useState({
     comment: ``,
@@ -15,7 +21,7 @@ const ReviewForm = ({onReviewPost, isPostSuccessfull, clearPostStatus}) => {
   });
 
   const {comment, rating} = review;
-  const isSubmitDisabled = comment.length < 50 || rating === 0;
+  const isSubmitDisabled = comment.length < MIN_REVIEW_LENGTH || rating === 0;
 
   const handleStarClick = (evt) => {
     setReview({
@@ -33,7 +39,7 @@ const ReviewForm = ({onReviewPost, isPostSuccessfull, clearPostStatus}) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onReviewPost(id, review);
+    dispatch(postReview(id, review));
   };
 
   useEffect(() => {
@@ -42,9 +48,9 @@ const ReviewForm = ({onReviewPost, isPostSuccessfull, clearPostStatus}) => {
         comment: ``,
         rating: 0,
       });
-      clearPostStatus();
+      dispatch(clearPostReviewStatus());
     }
-  }, [clearPostStatus, isPostSuccessfull]);
+  }, [dispatch, isPostSuccessfull]);
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
@@ -102,24 +108,4 @@ const ReviewForm = ({onReviewPost, isPostSuccessfull, clearPostStatus}) => {
   );
 };
 
-ReviewForm.propTypes = {
-  onReviewPost: PropTypes.func,
-  isPostSuccessfull: PropTypes.bool,
-  clearPostStatus: PropTypes.func,
-};
-
-const mapStateToProps = ({isPostSuccessfull}) => ({
-  isPostSuccessfull
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onReviewPost(id, review) {
-    dispatch(postReview(id, review));
-  },
-  clearPostStatus() {
-    dispatch(ActionCreator.clearPostReviewStatus());
-  },
-});
-
-export {ReviewForm};
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewForm);
+export default ReviewForm;

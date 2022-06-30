@@ -1,3 +1,5 @@
+import {createAction} from '@reduxjs/toolkit';
+
 export const ActionType = {
   GET_CITY: `main/getCity`,
   GET_OFFERS: `main/getOffers`,
@@ -12,46 +14,57 @@ export const ActionType = {
   CLEAR_POST_REVIEW_STATUS: `offers/clearPostReviewStatus`,
 };
 
-export const ActionCreator = {
-  getCity: (city) => ({
-    type: ActionType.GET_CITY,
+export const getCity = createAction(ActionType.GET_CITY, (city) => {
+  return {
     payload: city,
-  }),
-  getOffers: (offers) => ({
-    type: ActionType.GET_OFFERS,
+  };
+});
+
+export const getOffers = createAction(ActionType.GET_OFFERS, (offers) => {
+  return {
     payload: offers,
-  }),
-  getOfferById: (offer) => ({
-    type: ActionType.GET_OFFER_BY_ID,
+  };
+});
+
+export const getOfferById = createAction(ActionType.GET_OFFER_BY_ID, (offer) => {
+  return {
     payload: offer,
-  }),
-  clearOfferById: () => ({
-    type: ActionType.CLEAR_OFFER_BY_ID,
-  }),
-  getNearbyOffers: (offers) => ({
-    type: ActionType.GET_NEARBY_OFFERS,
+  };
+});
+
+export const clearOfferById = createAction(ActionType.CLEAR_OFFER_BY_ID);
+
+export const getNearbyOffers = createAction(ActionType.GET_NEARBY_OFFERS, (offers) => {
+  return {
     payload: offers,
-  }),
-  getReviews: (reviews) => ({
-    type: ActionType.GET_REVIEWS,
+  };
+});
+
+export const getReviews = createAction(ActionType.GET_REVIEWS, (reviews) => {
+  return {
     payload: reviews,
-  }),
-  postReview: (reviews) => ({
-    type: ActionType.POST_REVIEW,
+  };
+});
+
+export const addReview = createAction(ActionType.POST_REVIEW, (reviews) => {
+  return {
     payload: reviews,
-  }),
-  clearPostReviewStatus: () => ({
-    type: ActionType.CLEAR_POST_REVIEW_STATUS,
-  }),
-  requireAuthorization: (status, email) => ({
-    type: ActionType.REQUIRED_AUTHORIZATION,
-    payload: {status, email},
-  }),
-  requireLogout: () => ({
-    type: ActionType.REQUIRE_LOGOUT,
-  }),
-  redirectToRoute: (url) => ({
-    type: ActionType.REDIRECT_TO_ROUTE,
+  };
+});
+
+export const clearPostReviewStatus = createAction(ActionType.CLEAR_POST_REVIEW_STATUS);
+
+export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status, email) => {
+  return {
+    payload: {status, email}
+  };
+});
+
+export const requireLogout = createAction(ActionType.REQUIRE_LOGOUT);
+
+export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => {
+  return {
     payload: url,
-  })
-};
+  };
+});
+

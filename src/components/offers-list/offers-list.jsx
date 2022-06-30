@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import PlaceCard from '../place-card/place-card';
 import PropTypes from 'prop-types';
 import offerProp from '../../types/offer.prop';
@@ -7,20 +7,19 @@ import SortOptions from '../sort-options/sort-options';
 import {sortOffers} from '../../const/const';
 
 const OffersList = ({selectedCity, offers}) => {
-  const listItemHoverHandler = (id) => {
+  const listItemHoverHandler = useCallback((id) => {
     onListItemHover(id);
-  };
+  }, []);
 
   const [selectedPoint, setSelectedPoint] = useState(undefined);
-
   const onListItemHover = (id) => {
     setSelectedPoint(id);
   };
 
   const [sortedOffers, setSortedOffers] = useState(offers);
-  const onSortModeChange = (sort) => {
+  const onSortModeChange = useCallback((sort) => {
     setSortedOffers(sortOffers(offers, sort));
-  };
+  }, [offers]);
 
   useEffect(() => {
     setSortedOffers(offers);

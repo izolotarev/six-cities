@@ -1,22 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {AppRoute, cities} from '../../const/const';
 import OffersList from '../offers-list/offers-list';
-import offerProp from '../../types/offer.prop';
-import {connect} from 'react-redux';
-import {ActionCreator} from '../../store/action';
+import {useDispatch, useSelector} from 'react-redux';
+import {getCity} from '../../store/action';
 import MainScreenEmpty from '../main-empty/main-empty';
 import UserNavigation from '../user-navigation/user-navigation';
+import MainCityItem from './main-city-item';
+import {getOffers, getSelectedCity} from '../../store/reducers/offers-data/selectors';
 
-const MainScreen = ({offers, selectedCity, onCityChange}) => {
+const MainScreen = () => {
+  const offers = useSelector(getOffers);
+  const selectedCity = useSelector(getSelectedCity);
+
+  const dispatch = useDispatch();
+
   const offersInSelectedCity = offers.filter((offer) => offer.city.name === selectedCity);
 
   const handleCityClick = (evt) => {
     evt.preventDefault();
     const input = evt.target;
     if (input.textContent) {
-      onCityChange(input.textContent);
+      dispatch(getCity(input.textContent));
     }
   };
 
@@ -44,15 +49,7 @@ const MainScreen = ({offers, selectedCity, onCityChange}) => {
             <ul className="locations__list tabs__list">
               {
                 cities.map((menuCity) => (
-                  <li key={menuCity} className="locations__item">
-                    <a
-                      className={`locations__item-link tabs__item ${menuCity === selectedCity ? `tabs__item--active` : ``}`}
-                      href="#"
-                      onClick={handleCityClick}
-                    >
-                      <span>{menuCity}</span>
-                    </a>
-                  </li>
+                  <MainCityItem key={menuCity} menuCity={menuCity} selectedCity={selectedCity} onClick={handleCityClick} />
                 ))
               }
             </ul>
@@ -68,21 +65,5 @@ const MainScreen = ({offers, selectedCity, onCityChange}) => {
   );
 };
 
-MainScreen.propTypes = {
-  offers: PropTypes.arrayOf(offerProp),
-  selectedCity: PropTypes.string.isRequired,
-  onCityChange: PropTypes.func,
-};
+export default MainScreen;
 
-const mapStateToProps = ({selectedCity}) => ({
-  selectedCity,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onCityChange(selectedCity) {
-    dispatch(ActionCreator.getCity(selectedCity));
-  },
-});
-
-export {MainScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

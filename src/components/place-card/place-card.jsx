@@ -1,5 +1,4 @@
-import React from 'react';
-import MouseEvent from 'react';
+import React, {memo} from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCardImageSize} from '../../const/const';
 import offerProp from '../../types/offer.prop';
@@ -95,4 +94,4 @@ PlaceCard.propTypes = {
   isPropertyScreen: PropTypes.bool,
 };
 
-export default PlaceCard;
+export default memo(PlaceCard);

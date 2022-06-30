@@ -1,15 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {AuthorizationStatus} from '../../const/const';
 import {logout} from '../../store/api-actions';
 import {Link} from 'react-router-dom';
+import {getAuthorizationStatus, getUserEmail} from '../../store/reducers/user/selectors';
 
-const UserNavigation = ({authorizationStatus, userEmail, onLogout}) => {
+const UserNavigation = () => {
+
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const userEmail = useSelector(getUserEmail);
+
+  const dispatch = useDispatch();
 
   const handleLogoutClick = (evt) => {
     evt.preventDefault();
-    onLogout();
+    dispatch(logout());
   };
 
   return (
@@ -42,22 +47,5 @@ const UserNavigation = ({authorizationStatus, userEmail, onLogout}) => {
   );
 };
 
-const mapStateToProps = ({authorizationStatus, userEmail}) => ({
-  authorizationStatus,
-  userEmail,
-});
+export default UserNavigation;
 
-const mapDispatchToProps = (dispatch) => ({
-  onLogout() {
-    dispatch(logout());
-  }
-});
-
-UserNavigation.propTypes = {
-  authorizationStatus: PropTypes.string.isRequired,
-  userEmail: PropTypes.string,
-  onLogout: PropTypes.func.isRequired,
-};
-
-export {UserNavigation};
-export default connect(mapStateToProps, mapDispatchToProps)(UserNavigation);
