@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import MainScreen from '../main/main';
 import {Router as BrowserRouter, Route, Switch} from 'react-router-dom';
 import LoginScreen from '../login/login';
@@ -6,27 +6,15 @@ import FavoritesScreen from '../favorites/favorites';
 import Screen404 from '../not-found-screen/not-found-screen';
 import {AppRoute} from '../../const/const';
 import PropertyScreen from '../property/property';
-import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
-import {fetchOffers} from '../../store/api-actions';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from "../../browser-history";
-import {getLoadedDataStatus, getOffers} from '../../store/reducers/offers-data/selectors';
+import {getDataLoadedStatus, getOffers} from '../../store/reducers/offers-data/selectors';
 
 const App = () => {
   const offers = useSelector(getOffers);
-  const isDataLoaded = useSelector(getLoadedDataStatus);
-
-  const dispatch = useDispatch();
-
-  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
-
-  useEffect(() => {
-    if (!isDataLoaded) {
-      dispatch(fetchOffers());
-    }
-  }, [isDataLoaded]);
+  const isDataLoaded = useSelector(getDataLoadedStatus);
 
   if (!isDataLoaded) {
     return (
@@ -46,11 +34,7 @@ const App = () => {
         <PrivateRoute
           exact
           path={AppRoute.FAVORITE}
-          render={
-            favoriteOffers.length > 0
-              ? () => <FavoritesScreen favoriteOffers={favoriteOffers}/>
-              : () => <FavoritesScreenEmpty/>
-          }>
+          render={()=> <FavoritesScreen/>}>
         </PrivateRoute>
         <Route path={`${AppRoute.OFFER}/:id`}>
           <PropertyScreen />

@@ -1,4 +1,5 @@
 import axios from "axios";
+// import {toast} from 'react-toastify';
 
 const BACKEND_URL = `https://6.react.pages.academy/six-cities`;
 const REQUEST_TIMEOUT = 5000;
@@ -18,8 +19,6 @@ export const createAPI = (onUnauthorized) => {
 
   const onFail = (err) => {
     const {response} = err;
-
-    // toast.info(response.data.error);
 
     if (response.status === HttpCode.UNAUTHORIZED) {
       onUnauthorized();

@@ -6,6 +6,7 @@ import {useParams} from 'react-router-dom';
 import {getReviewPostStatus} from '../../store/reducers/reviews-data/selectors';
 
 const MIN_REVIEW_LENGTH = 50;
+const MAX_REVIEW_LENGTH = 300;
 
 const ReviewForm = () => {
   const params = useParams();
@@ -95,6 +96,7 @@ const ReviewForm = () => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={handleTextareaChange}
         value={comment}
+        maxLength={MAX_REVIEW_LENGTH}
       >
 
       </textarea>

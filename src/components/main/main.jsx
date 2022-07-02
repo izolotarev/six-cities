@@ -5,16 +5,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getCity} from '../../store/action';
 import MainScreenEmpty from '../main-empty/main-empty';
 import MainCityItem from './main-city-item';
-import {getOffers, getSelectedCity} from '../../store/reducers/offers-data/selectors';
+import {getOffersInSelectedCity, getSelectedCity} from '../../store/reducers/offers-data/selectors';
 import Header from '../header/header';
 
 const MainScreen = () => {
-  const offers = useSelector(getOffers);
   const selectedCity = useSelector(getSelectedCity);
+  const offersInSelectedCity = useSelector(getOffersInSelectedCity);
 
   const dispatch = useDispatch();
-
-  const offersInSelectedCity = offers.filter((offer) => offer.city.name === selectedCity);
 
   const handleCityClick = (evt) => {
     evt.preventDefault();

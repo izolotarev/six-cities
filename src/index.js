@@ -6,12 +6,11 @@ import {Provider} from 'react-redux';
 import rootReducer from './store/reducers/root-reducer';
 import {createAPI} from './services/api';
 import {AuthorizationStatus} from "./const/const";
-import {checkAuth} from './store/api-actions';
+import {checkAuth, fetchFavoriteOffers, fetchOffers, loadInitialData} from './store/api-actions';
 import {redirect} from "./store/middlewares/redirect";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {requireAuthorization} from './store/action';
-
 
 const api = createAPI(
     () => store.dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH))
@@ -28,6 +27,8 @@ const store = configureStore({
 });
 
 store.dispatch(checkAuth());
+store.dispatch(fetchOffers());
+store.dispatch(fetchFavoriteOffers());
 
 ReactDOM.render(
     <Provider store={store}>

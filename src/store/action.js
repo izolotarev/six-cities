@@ -12,6 +12,10 @@ export const ActionType = {
   GET_REVIEWS: `offers/getReviews`,
   POST_REVIEW: `offers/postReview`,
   CLEAR_POST_REVIEW_STATUS: `offers/clearPostReviewStatus`,
+  GET_FAVORITE_OFFERS: `favorite/getFavoriteOffers`,
+  CLEAR_FAVORITE_OFFERS: `favorite/clearFavoriteOffers`,
+  ADD_TO_FAVORITE_OFFERS: `favorite/addToFavorite`,
+  REMOVE_FROM_FAVORITE_OFFERS: `favorite/removeFromFavorite`,
 };
 
 export const getCity = createAction(ActionType.GET_CITY, (city) => {
@@ -53,6 +57,32 @@ export const addReview = createAction(ActionType.POST_REVIEW, (reviews) => {
 });
 
 export const clearPostReviewStatus = createAction(ActionType.CLEAR_POST_REVIEW_STATUS);
+
+export const getFavoriteOffers = createAction(ActionType.GET_FAVORITE_OFFERS,
+    (favoriteOffers) => ({
+      payload: {
+        favoriteOffers,
+      },
+    }),
+);
+
+export const clearFavoriteOffers = createAction(ActionType.CLEAR_FAVORITE_OFFERS);
+
+export const addToFavoriteOffers = createAction(ActionType.ADD_TO_FAVORITE_OFFERS,
+    (favoriteOffer) => ({
+      payload: {
+        favoriteOffer,
+      },
+    }),
+);
+
+export const removeFromFavoriteOffers = createAction(ActionType.REMOVE_FROM_FAVORITE_OFFERS,
+    (favoriteOffer) => ({
+      payload: {
+        favoriteOffer,
+      },
+    }),
+);
 
 export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status, email) => {
   return {

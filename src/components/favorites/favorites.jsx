@@ -4,8 +4,12 @@ import PropTypes from 'prop-types';
 import offerProp from '../../types/offer.prop';
 import PlaceCard from '../place-card/place-card';
 import Header from '../header/header';
+import {useSelector} from 'react-redux';
+import {getFavoriteOffers} from '../../store/reducers/offers-data/selectors';
+import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
 
-const FavoritesScreen = ({favoriteOffers}) => {
+const FavoritesScreen = () => {
+  const favoriteOffers = useSelector(getFavoriteOffers);
   const favoriteCities = {};
 
   cities.map((city) => {
@@ -15,6 +19,10 @@ const FavoritesScreen = ({favoriteOffers}) => {
     }
     return null;
   });
+
+  if (favoriteOffers.length === 0) {
+    return <FavoritesScreenEmpty />;
+  }
 
   return (
     <div className="page">

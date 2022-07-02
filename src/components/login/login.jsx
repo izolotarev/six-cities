@@ -1,9 +1,17 @@
 import React, {useRef} from 'react';
+import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import {AppRoute, AuthorizationStatus, getRandomCity} from '../../const/const';
+import {getCity, redirectToRoute} from '../../store/action';
 import {login} from '../../store/api-actions';
+import {getAuthorizationStatus} from '../../store/reducers/user/selectors';
 import Header from '../header/header';
 
+const randomCity = getRandomCity();
+
 const LoginScreen = () => {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
   const dispatch = useDispatch();
 
   const loginRef = useRef();
@@ -19,6 +27,16 @@ const LoginScreen = () => {
       }));
     }
   };
+
+  const handleRandomCityClick = (evt) => {
+    evt.preventDefault();
+    dispatch(getCity(randomCity));
+    dispatch(redirectToRoute(AppRoute.ROOT));
+  };
+
+  if (authorizationStatus === AuthorizationStatus.AUTH) {
+    return <Redirect to={AppRoute.ROOT} />;
+  }
 
   return (
     <div className="page page--gray page--login">
@@ -61,8 +79,8 @@ const LoginScreen = () => {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
+              <a className="locations__item-link" href="/" onClick={handleRandomCityClick}>
+                <span>{randomCity}</span>
               </a>
             </div>
           </section>

@@ -11,6 +11,7 @@ export const APIRoute = {
   LOGIN: '/login',
   LOGOUT: '/logout',
   REVIEWS: '/comments',
+  FAVORITE: '/favorite',
 };
 
 export const AuthorizationStatus = {
@@ -28,6 +29,20 @@ export const RoomTypes = {
 export const MAX_RATING = 5;
 
 export const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+
+const getRandomIndex = (min, max) => {
+  if (min < 0 || max < 0) {
+    return 0;
+  } else if (min > max) {
+    [min, max] = [max, min];
+  }
+  return Math.round(Math.random() * (max - min) + min);
+};
+
+export const getRandomCity = () => {
+  const index = getRandomIndex(0, cities.length - 1);
+  return cities[index];
+};
 
 export const URL_MARKER_DEFAULT =
   './img/pin.svg';
@@ -70,4 +85,10 @@ export const sortOffers = (data, filter) => {
       return data.slice();
   }
 };
+
+export const TypeOfFavoriteAction = {
+  ADD_TO_FAVORITE: 1,
+  REMOVE_FROM_FAVORITE: 0,
+};
+
 
