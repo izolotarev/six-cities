@@ -4,7 +4,7 @@ import {AppRoute, RoomTypes, MAX_RATING, Screen, BasicCardImageSize, FavoriteCar
 import offerProp from '../../types/offer.prop';
 import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
-import {getOfferFavoriteStatusById} from '../../store/reducers/offers-data/selectors';
+import {getOfferFavoriteStatusById} from '../../store/reducers/offers/selectors';
 import {getAuthorizationStatus} from '../../store/reducers/user/selectors';
 import {useDispatch} from 'react-redux';
 import {redirectToRoute} from '../../store/action';

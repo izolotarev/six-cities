@@ -55,6 +55,7 @@ const LoginScreen = () => {
                   type="email"
                   name="email"
                   placeholder="Email"
+                  data-testid ="email"
                   required
                 />
               </div>
@@ -66,6 +67,7 @@ const LoginScreen = () => {
                   type="password"
                   name="password"
                   placeholder="Password"
+                  data-testid ="password"
                   required
                 />
               </div>

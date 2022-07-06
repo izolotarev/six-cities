@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getCity} from '../../store/action';
 import MainScreenEmpty from '../main-empty/main-empty';
 import MainCityItem from './main-city-item';
-import {getOffersInSelectedCity, getSelectedCity} from '../../store/reducers/offers-data/selectors';
+import {getOffersInSelectedCity, getSelectedCity} from '../../store/reducers/offers/selectors';
 import Header from '../header/header';
 
 const MainScreen = () => {

@@ -6,11 +6,13 @@ import {Provider} from 'react-redux';
 import rootReducer from './store/reducers/root-reducer';
 import {createAPI} from './services/api';
 import {AuthorizationStatus} from "./const/const";
-import {checkAuth, fetchFavoriteOffers, fetchOffers, loadInitialData} from './store/api-actions';
+import {checkAuth, fetchFavoriteOffers, fetchOffers} from './store/api-actions';
 import {redirect} from "./store/middlewares/redirect";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {requireAuthorization} from './store/action';
+import {Router as BrowserRouter} from 'react-router-dom';
+import browserHistory from "./browser-history";
 
 const api = createAPI(
     () => store.dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH))
@@ -32,8 +34,11 @@ store.dispatch(fetchFavoriteOffers());
 
 ReactDOM.render(
     <Provider store={store}>
-      <ToastContainer/>
-      <App/>
-    </Provider>,
+      <BrowserRouter history={browserHistory}>
+        <ToastContainer/>
+        <App/>
+      </BrowserRouter>
+    </Provider>
+    ,
     document.querySelector(`#root`)
 );

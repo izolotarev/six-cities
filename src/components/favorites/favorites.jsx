@@ -5,7 +5,7 @@ import offerProp from '../../types/offer.prop';
 import PlaceCard from '../place-card/place-card';
 import Header from '../header/header';
 import {useSelector} from 'react-redux';
-import {getFavoriteOffers} from '../../store/reducers/offers-data/selectors';
+import {getFavoriteOffers} from '../../store/reducers/offers/selectors';
 import FavoritesScreenEmpty from '../favorites-empty/favorites-empty';
 
 const FavoritesScreen = () => {

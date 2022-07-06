@@ -3,7 +3,7 @@ import {clearPostReviewStatus} from '../../store/action';
 import {postReview} from '../../store/api-actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
-import {getReviewPostStatus} from '../../store/reducers/reviews-data/selectors';
+import {getReviewPostStatus} from '../../store/reducers/reviews/selectors';
 
 const MIN_REVIEW_LENGTH = 50;
 const MAX_REVIEW_LENGTH = 300;

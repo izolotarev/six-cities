@@ -3,7 +3,7 @@ import {AuthorizationStatus} from '../../../const/const';
 import {createReducer} from '@reduxjs/toolkit';
 
 export const initialState = {
-  userEmail: ``,
+  userEmail: undefined,
   authorizationStatus: AuthorizationStatus.NO_AUTH,
 };
 

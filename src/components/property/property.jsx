@@ -9,8 +9,8 @@ import {clearOfferById, redirectToRoute} from '../../store/action';
 import {useDispatch, useSelector} from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
 import UserNavigation from '../user-navigation/user-navigation';
-import {getOfferFavoriteStatusById, getNearbyOffers, getOffer} from '../../store/reducers/offers-data/selectors';
-import {getReviews} from '../../store/reducers/reviews-data/selectors';
+import {getOfferFavoriteStatusById, getNearbyOffers, getOffer} from '../../store/reducers/offers/selectors';
+import {getReviews} from '../../store/reducers/reviews/selectors';
 import {getAuthorizationStatus} from '../../store/reducers/user/selectors';
 
 const MAX_NUMBER_OF_REVIEWS = 10;

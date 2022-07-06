@@ -44,6 +44,12 @@ export const getRandomCity = () => {
   return cities[index];
 };
 
+export const getRandomRoomType = () => {
+  const keys = Object.keys(RoomTypes);
+  const index = getRandomIndex(0, keys.length - 1);
+  return keys[index];
+};
+
 export const URL_MARKER_DEFAULT =
   './img/pin.svg';
 
